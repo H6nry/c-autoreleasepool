@@ -6,7 +6,7 @@
 	H6nry <henry.anonym@gmail.com>
 
 @Version
-	Version 0.9
+	Version 0.10
 
 @Description
 	An attempt to implement NSAutoreleasepool (or @autoreleasepool{...}) from Objective-C and Cocoa purely in C into the C language.
@@ -21,11 +21,10 @@
 	Due to the informality of this license, you are allowed to ignore this if you really want to.
 
 @TODO
-	-Implement autoreleasepools within other ones (pool-ception :P)
 	-Implement calloc, realloc...(?) and other heap-allocating functions
 	-Improve code, especially the gc_free function
 	-Improve performance (it gets a bit slow if too much is there)
-	-Write a proper test-project as a demo that this stuff really works (does anyone know a REALLY bad C-Dev (except me :P)??)
+	-Write a proper test-project as a demo that this stuff really works (does anyone know a REALLY bad C-Dev. (except me :P)??)
 */
 
 
@@ -43,7 +42,7 @@ typedef struct gc_s_autoreleasepool {
 	size_t pool_volume; //total bytes allocated in this pool
 	unsigned int allocated_objects; //object counter of this pool
 	enum gc_pool_state state; //maybe for threading...?
-	//struct gc_o_autoreleasepool *inheriting_pool; //not used yet. here for the feature "pool-ception"
+	struct gc_s_autoreleasepool *inheriting_pool; //the pool from which this is inherited. Should be NULL for the current one!
 	struct gc_so_autoreleasepool *first_object; //first object of the pool
 } gc_s_autoreleasepool;
 
@@ -56,7 +55,7 @@ typedef struct gc_so_autoreleasepool {
 
 void gc_start_autoreleasepool();
 void gc_end_autoreleasepool();
-struct gc_s_autoreleasepool current_autoreleasepool;
+struct gc_s_autoreleasepool *current_autoreleasepool;
 
 
 #define malloc(x) (gc_malloc(x)) //define a preprocessor-directive for the hooked malloc

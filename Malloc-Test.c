@@ -12,6 +12,8 @@ int main(void) {
 	double *doub;
 	int i;
 	int j;
+	char *a;
+	char *b;
 
 
 	printf("Hallo, C!\n");
@@ -21,9 +23,12 @@ int main(void) {
 	printf("Wert: %i\n", *testint);
 
 	gc_autoreleasepool( //Create a new gc_autoreleasepool
-		for (i=0; i<=100; i++) {
-			malloc(sizeof(double));
-		}
+		gc_autoreleasepool(
+			for (i=0; i<=10; i++) {
+				malloc(sizeof(double));
+			}
+			free(testint);
+		)
 		doub = (double *)malloc(sizeof(double));
 		free(doub);
 		doub = (double *)malloc(sizeof(double));
@@ -32,8 +37,6 @@ int main(void) {
 		s = "MONA LISA";
 		copied = strdup(s);
 		printf("Der Name: %s\n", copied);
-
-		free(testint);
 	)
 	
 	printf("Enter.");
@@ -41,8 +44,8 @@ int main(void) {
 
 	gc_autoreleasepool(
 		bad_function();
-		for (i=0; i<=100; i++) {
-			for (j=0; j<=10; j++) {
+		for (i=0; i<=10; i++) {
+			for (j=0; j<=3; j++) {
 				malloc(sizeof(double));
 			}
 		}
@@ -52,7 +55,7 @@ int main(void) {
 	)
 
 	gc_autoreleasepool(
-		printf("this is an Empty autoreleasepool.\n");
+		printf("this is my empty autoreleasepool :)\n");
 	)
 	
 	printf("Enter3.");
